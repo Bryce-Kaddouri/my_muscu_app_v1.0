@@ -126,6 +126,7 @@ class DBFirebase {
         email: email,
         password: password,
       );
+      print(userCredential.user);
       return userCredential;
     } on FirebaseAuthException catch (e) {
       return null;
