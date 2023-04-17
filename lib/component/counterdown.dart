@@ -33,7 +33,6 @@ class _CounterDownState extends State<CounterDown> {
     if (widget.autoStart) {
       widget.controller.start();
     }
-    // widget.controller.start();
   }
 
   @override
