@@ -1,5 +1,5 @@
 // import 'package:flutter_tts/flutter_tts.dart';
-import 'package:muscuappwithfire/screens/start_seance.dart/repos_card.dart';
+import 'package:muscuappwithfire/screens/start_seance.dart/components/repos_card.dart';
 import 'package:muscuappwithfire/services/firebase.dart';
 import 'package:muscuappwithfire/services/textToSpeach.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
@@ -36,8 +36,6 @@ class _StartSeanceScreenState extends State<StartSeanceScreen> {
 
     return docRef;
   }
-
-  final int _duration = 10;
 
   int currentCard = 0;
   List<CountDownController> controllerTimer = [];
@@ -152,7 +150,7 @@ class _StartSeanceScreenState extends State<StartSeanceScreen> {
           );
 
           return StackedCardCarousel(
-            type: StackedCardCarouselType.cardsStack,
+            type: StackedCardCarouselType.fadeOutStack,
             onPageChanged: (pageIndex) {
               int nbTimerPrevious = 0;
               var docs = snapshot.data!.docs;

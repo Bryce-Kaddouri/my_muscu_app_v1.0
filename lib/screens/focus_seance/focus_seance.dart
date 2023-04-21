@@ -113,7 +113,7 @@ class _FocusSeanceState extends State<FocusSeance> {
       body: Column(children: [
         Container(
           width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           alignment: Alignment.centerRight,
           height: 40,
           child: ElevatedButton.icon(
@@ -131,7 +131,7 @@ class _FocusSeanceState extends State<FocusSeance> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                width: 100,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -213,7 +213,7 @@ class _FocusSeanceState extends State<FocusSeance> {
                               ),
                               const Text(' : '),
                               Container(
-                                width: 100,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -376,7 +376,7 @@ class _FocusSeanceState extends State<FocusSeance> {
               label: Text('Repos')),
         ),
         Container(
-          height: MediaQuery.of(context).size.height - 160,
+          height: MediaQuery.of(context).size.height - 170,
           child: StreamBuilder<QuerySnapshot>(
             stream: DBFirebase().getExosBySeance(
               widget.idSeance,
@@ -404,72 +404,62 @@ class _FocusSeanceState extends State<FocusSeance> {
               }
 
               return ReorderableListView.builder(
-                prototypeItem: Container(
-                  height: 100,
-                  color: Colors.grey[900],
-                  child: const ListTile(
-                    title: Text('Exercice'),
-                  ),
-                ),
+                padding: const EdgeInsets.all(8),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   var getUpdate = snapshot.data!.docs[index].get('updatedAt');
                   var getCreate = snapshot.data!.docs[index].get('createdAt');
                   var dateUpdate = getUpdate.toDate();
                   var dateCreate = getCreate.toDate();
-                  return Container(
-                    key: Key('cont$index'),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: ListTile(
-                      tileColor: Colors.grey[900],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      key: Key('$index'),
-                      title: Text(snapshot.data!.docs[index].get('titre'),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24)),
-                      subtitle: Text(
-                        'modifié le : ${dateUpdate.toString()}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      leading: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Supprimer'),
-                                content: const Text(
-                                    'Voulez-vous vraiment supprimer cet exercice ?'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Annuler')),
-                                  TextButton(
-                                    onPressed: () async {
+                  return ListTile(
+                    minVerticalPadding: 10,
+                    // tileColor: Colors.grey[900],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    key: Key('$index'),
+                    title: Text(snapshot.data!.docs[index].get('titre'),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24)),
+                    subtitle: Text(
+                      'modifié le : ${dateUpdate.toString()}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    leading: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Supprimer'),
+                              content: const Text(
+                                  'Voulez-vous vraiment supprimer cet exercice ?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
                                       Navigator.pop(context);
-
-                                      DBFirebase().deleteExoById(
-                                          snapshot.data!.docs[index].id,
-                                          widget.idSeance);
-                                      setState(() {});
                                     },
-                                    child: const Text('Supprimer'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
+                                    child: const Text('Annuler')),
+                                TextButton(
+                                  onPressed: () async {
+                                    var t = DBFirebase().deleteExoByIdSeanceExo(
+                                        snapshot.data!.docs[index].id,
+                                        widget.idSeance,
+                                        index);
+                                    print(index);
+                                    print(t);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Supprimer'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   );
                 },
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 proxyDecorator: proxyDecorator,
                 onReorder: (int from, int to) {
                   bool fromIsGreat = from > to ? true : false;
@@ -508,11 +498,14 @@ class _FocusSeanceState extends State<FocusSeance> {
             },
           ),
         ),
+        SizedBox(
+          height: 10,
+        ),
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           RegExp regexInt = RegExp(r'^[0-9]+$');
-          RegExp regexString = RegExp(r'^[a-zA-Z]+$');
+          RegExp regexString = RegExp(r'^[A-Za-zéàç ]+$');
 
           showDialog(
             context: context,

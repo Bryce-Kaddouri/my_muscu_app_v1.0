@@ -17,7 +17,7 @@ class ClassicalCard extends StatelessWidget {
       color: Colors.white,
       elevation: 4.0,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
             Container(
@@ -29,7 +29,7 @@ class ClassicalCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.black, fontSize: 32),
               ),
             ),
-            FlutterLogo(size: 300),
+            FlutterLogo(size: 250),
             Text(
               '$nbRep répétitions à $poids KG',
               style: TextStyle(color: Colors.black, fontSize: 24),

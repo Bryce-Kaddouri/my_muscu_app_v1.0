@@ -233,15 +233,43 @@ class DBFirebase {
     }
   }
 
-  deleteExoById(String idSeance, String idExo) {
+  deleteExoByIdSeanceExo(String idSeance, String idExo, int index) async {
     User? user = auth.currentUser;
     if (user != null) {
-      FirebaseFirestore.instance
+      // supprimer l'exo
+      var t = FirebaseFirestore.instance
           .collection(user.uid)
           .doc(idSeance)
           .collection('exos')
           .doc(idExo)
           .delete();
+
+      // tester si la suppression a bien été effectuée
+      if (t != null) {
+        // récupérer les exos
+        var exos = await FirebaseFirestore.instance
+            .collection(user.uid)
+            .doc(idSeance)
+            .collection('exos')
+            .orderBy('index')
+            .get();
+
+        // réordonner les index
+        for (var i = index; i < exos.docs.length; i++) {
+          FirebaseFirestore.instance
+              .collection(user.uid)
+              .doc(idSeance)
+              .collection('exos')
+              .doc(exos.docs[i].id)
+              .update({'index': i - 1});
+        }
+      } else {
+        return false;
+      }
+
+      //     .delete();
+      // print(t);
+
       return true;
     } else {
       return false;

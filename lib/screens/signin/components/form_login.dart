@@ -32,17 +32,23 @@ class _FormLoginState extends State<FormLogin> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[900],
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      margin: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.grey[900],
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.width * 0.1, horizontal: 40),
       child: Form(
         key: widget.formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Authentification', style: TextStyle(fontSize: 40)),
+            Text('Authentification',
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.08)),
             const SizedBox(
-              height: 60,
+              height: 30,
             ),
             TextFormField(
               validator: (value) {
@@ -128,9 +134,7 @@ class _FormLoginState extends State<FormLogin> {
               },
               child: Text('Pas encore de compte ?'),
             ),
-            const SizedBox(
-              height: 50,
-            ),
+            Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(200, 50),
@@ -193,6 +197,7 @@ class _FormLoginState extends State<FormLogin> {
                     )
                   : const Text('Se connecter'),
             ),
+            Spacer(),
           ],
         ),
       ),
